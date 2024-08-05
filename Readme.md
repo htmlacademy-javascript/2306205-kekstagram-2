@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Eugene Chepkasov](https://up.htmlacademy.ru/javascript-individual/2/user/2306205).
-* Наставник: `Неизвестно`.
+* Наставник: [Николай Колганов](https://htmlacademy.ru/profile/id794007).
 
 ---
 
