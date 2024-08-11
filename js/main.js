@@ -1,2 +1,5 @@
-import './create-preview.js';
-import './create-full-photo.js';
+import {createPhotoArray} from './create-data.js';
+import {renderPreview} from './create-preview.js';
+
+const photos = createPhotoArray();
+renderPreview(photos);
