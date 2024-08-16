@@ -69,6 +69,4 @@ const initComments = (data) => {
   addCommentsListener();
 };
 
-
-
 export {initComments, removeCommentsListener};
