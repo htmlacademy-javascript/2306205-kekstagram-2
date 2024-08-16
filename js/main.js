@@ -1,5 +1,6 @@
 import {createPhotoArray} from './create-data.js';
-import {renderPreview} from './create-preview.js';
+import {renderPreviews, openFullPhotoOnClick} from './create-preview.js';
 
 const photos = createPhotoArray();
-renderPreview(photos);
+renderPreviews(photos);
+openFullPhotoOnClick(photos);

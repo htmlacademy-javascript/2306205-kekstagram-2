@@ -53,13 +53,22 @@ const addComments = () => {
   showComments(allComments);
 };
 
+const addCommentsListener = () => {
+  bigPictureButtonLoader.addEventListener('click', addComments);
+};
+
+const removeCommentsListener = () => {
+  bigPictureButtonLoader.removeEventListener('click', addComments);
+};
+
 const initComments = (data) => {
   allComments = data;
   currentCount = 0;
   commentsContainer.innerHTML = '';
   showComments(allComments);
-
-  bigPictureButtonLoader.addEventListener('click', addComments);
+  addCommentsListener();
 };
 
-export {initComments};
+
+
+export {initComments, removeCommentsListener};

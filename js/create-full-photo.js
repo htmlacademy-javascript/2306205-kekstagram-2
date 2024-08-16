@@ -1,4 +1,4 @@
-import {initComments} from './create-comments.js';
+import {initComments, removeCommentsListener} from './create-comments.js';
 
 const bodyPage = document.querySelector('body');
 const bigPictureContainer = document.querySelector('.big-picture');
@@ -10,33 +10,44 @@ const bigPictureLikesAmount = bigPictureContainer.querySelector('.likes-count');
 const onDocumentKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
-    closePhotoPopup();
+    closePopup();
   }
 };
 
-const openFullPhotoPopup = () => {
-  bigPictureContainer.classList.remove('hidden');
-  bodyPage.classList.add('modal-open');
-};
-
-function closePhotoPopup () {
-  bigPictureContainer.classList.add('hidden');
-  bodyPage.classList.remove('modal-open');
-}
-
-const onCloseButtonPress = () => {
-  bigPictureCloseButton.addEventListener('click', closePhotoPopup);
+const addClosePopupListener = () => {
+  bigPictureCloseButton.addEventListener('click', closePopup);
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-const renderFullPhotoPopup = ({url, description, likes, comments}) => {
-  openFullPhotoPopup();
+const removeClosePopupListener = () => {
+  bigPictureCloseButton.removeEventListener('click', closePopup);
+  document.removeEventListener('keydown', onDocumentKeydown);
+};
+
+const openPopup = () => {
+  bigPictureContainer.classList.remove('hidden');
+  bodyPage.classList.add('modal-open');
+  addClosePopupListener();
+};
+
+function closePopup () {
+  bigPictureContainer.classList.add('hidden');
+  bodyPage.classList.remove('modal-open');
+  removeClosePopupListener();
+  removeCommentsListener();
+}
+
+const fillPopupData = ({url, description, likes}) => {
   bigPicture.src = url;
   bigPicture.alt = description;
   bigPictureLikesAmount.textContent = likes;
   bigPictureCaption.textContent = description;
-  onCloseButtonPress();
-  initComments(comments);
 };
 
-export {renderFullPhotoPopup};
+const renderFullPhoto = (data) => {
+  openPopup();
+  fillPopupData(data);
+  initComments(data.comments);
+};
+
+export {renderFullPhoto};
