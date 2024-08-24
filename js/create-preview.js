@@ -22,15 +22,15 @@ const renderPreviews = (photosArray) => {
 const openFullPhotoOnClick = (photosArray) => {
   const handleOpenFullPhoto = (evt) => {
     const preview = evt.target.closest('[data-photo-id]');
-    if (preview === undefined) {
+    if (preview === undefined || preview === null) {
       return;
     }
     const targetPhoto = photosArray.find((item) => item.photoId === Number(preview.dataset.photoId));
     renderFullPhoto(targetPhoto);
   };
-
   pictureContainer.addEventListener('click', handleOpenFullPhoto);
 };
+
 
 export {renderPreviews, openFullPhotoOnClick};
 
