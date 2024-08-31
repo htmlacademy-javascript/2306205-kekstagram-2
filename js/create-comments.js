@@ -53,13 +53,9 @@ const addComments = () => {
   showComments(allComments);
 };
 
-const addCommentsListener = () => {
-  bigPictureButtonLoader.addEventListener('click', addComments);
-};
+const addCommentsListener = () => bigPictureButtonLoader.addEventListener('click', addComments);
 
-const removeCommentsListener = () => {
-  bigPictureButtonLoader.removeEventListener('click', addComments);
-};
+const removeCommentsListener = () => bigPictureButtonLoader.removeEventListener('click', addComments);
 
 const initComments = (data) => {
   allComments = data;

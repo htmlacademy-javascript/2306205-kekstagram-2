@@ -1,6 +1,6 @@
 const SCALE_STEP = 25;
-let scaleInit = 100;
-const scalePhoto = {25: 0.25, 50: 0.5, 75: 0.75, 100: 1};
+let currentScale = 100;
+const scaleValueMap = {25: 0.25, 50: 0.5, 75: 0.75, 100: 1};
 
 const scaleForm = document.querySelector('.img-upload__scale');
 const buttonScaleSmaller = scaleForm.querySelector('.scale__control--smaller');
@@ -10,31 +10,29 @@ const scaleControlInput = scaleForm.querySelector('.scale__control--value');
 const imgUploadPreview = document.querySelector('.img-upload__preview img');
 
 const decreaseScale = () => {
-  if (scaleInit > 25) {
-    const minusScale = scaleInit -= SCALE_STEP;
-    scaleControlInput.value = `${minusScale}%`;
-    imgUploadPreview.style.transform = `scale(${scalePhoto[minusScale]})`;
+  if (currentScale > 25) {
+    currentScale -= SCALE_STEP;
+    scaleControlInput.value = `${currentScale}%`;
+    imgUploadPreview.style.transform = `scale(${scaleValueMap[currentScale]})`;
   }
 };
 
 const increaseScale = () => {
-  if (scaleInit < 100) {
-    const plusScale = scaleInit += SCALE_STEP;
-    scaleControlInput.value = `${plusScale}%`;
-    imgUploadPreview.style.transform = `scale(${scalePhoto[plusScale]})`;
+  if (currentScale < 100) {
+    currentScale += SCALE_STEP;
+    scaleControlInput.value = `${currentScale}%`;
+    imgUploadPreview.style.transform = `scale(${scaleValueMap[currentScale]})`;
   }
 };
 
-const changeScale = () => {
+const addScaleChangeListeners = () => {
   buttonScaleBigger.addEventListener('click', increaseScale);
   buttonScaleSmaller.addEventListener('click', decreaseScale);
 };
 
-const resetScale = () => {
-  imgUploadPreview.style.transform = null;
-  scaleInit = 100;
-  buttonScaleBigger.removeEventListener('click', increaseScale);
-  buttonScaleSmaller.removeEventListener('click', decreaseScale);
+const resetScaleChanges = () => {
+  imgUploadPreview.style.transform = 'none';
+  currentScale = 100;
 };
 
-export {changeScale, resetScale};
+export {addScaleChangeListeners, resetScaleChanges};
