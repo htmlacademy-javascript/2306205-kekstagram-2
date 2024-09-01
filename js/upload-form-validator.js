@@ -21,7 +21,7 @@ const checkAmountHashtags = (hashtagsArray) => hashtagsArray.length <= 5;
 
 // Соответствие образцу
 const matchHashtagExample = (hashtagsArray) => {
-  if (hashtagsInput.value === null) {
+  if (hashtagsInput.value === '') {
     return true;
   } else {
     return hashtagsArray.every((hashtag) => hashtagExample.test(hashtag));
