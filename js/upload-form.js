@@ -8,6 +8,7 @@ const commentInput = uploadForm.querySelector('.text__description');
 const uploadInput = uploadForm.querySelector('.img-upload__input');
 const uploadImgEditor = uploadForm.querySelector('.img-upload__overlay');
 const closeUploadFormButton = uploadForm.querySelector('.img-upload__cancel');
+const effectPhotoSliderContainer = document.querySelector('.img-upload__effect-level');
 
 const resetImgEditor = () => {
   resetScaleChanges();
@@ -29,6 +30,8 @@ const initUploadForm = () => {
 
   hashtagsInput.addEventListener('keydown', (evt) => evt.stopPropagation());
   commentInput.addEventListener('keydown', (evt) => evt.stopPropagation());
+
+  effectPhotoSliderContainer.classList.add('hidden');
 };
 
 export {initUploadForm};

@@ -3,11 +3,6 @@ const uploadForm = document.querySelector('.img-upload__form');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 const hashtagExample = /^#[a-zа-яё0-9]{1,19}$/i;
-const messages = {
-  match: 'Хэштеги начинаются с "#", состоят из букв (от 1 до 19) и отделяются пробелом',
-  amount: 'Больше пяти хэштегов - это перебор. Давай сократим количество?',
-  repeat: 'Одинаковые хэштеги - не ок. Давай удалим?'
-};
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -15,6 +10,11 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
+const messages = {
+  match: 'Хэштеги начинаются с "#", состоят из букв (от 1 до 19) и отделяются пробелом',
+  amount: 'Больше пяти хэштегов - это перебор. Давай сократим количество?',
+  repeat: 'Одинаковые хэштеги - не ок. Давай удалим?'
+};
 
 // Количество хэштегов не более 5
 const checkAmountHashtags = (hashtagsArray) => hashtagsArray.length <= 5;
@@ -65,7 +65,7 @@ const validateComment = () => commentInput.value.length <= 140;
 pristine.addValidator(
   commentInput,
   validateComment,
-  '"Длина коммментария не должна быть больше 140 символов" (Джек Дорси)'
+  'Длина коммментария не должна быть больше 140 символов'
 );
 
 export {pristine};
