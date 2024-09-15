@@ -1,31 +1,13 @@
-let currentEffectName;
-let effectsLevelNumber;
+let currentEffectName = 'none';
+let effectsLevelNumber = 1;
 
-const effectsListMap = {
-  chrome: 'grayscale',
-  sepia: 'sepia',
-  marvin: 'invert',
-  phobos: 'blur',
-  heat: 'brightness',
-  none: 'none'
-};
-
-const effectsUnitMap = {
-  chrome: '',
-  sepia: '',
-  marvin: '%',
-  phobos: 'px',
-  heat: '',
-  none: 'none'
-};
-
-const sliderPapameters = {
-  chrome: {min: 0, max: 1, step: 0.1, start: 1},
-  sepia: {min: 0, max: 1, step: 0.1, start: 1},
-  marvin: {min: 0, max: 100, step: 1, start: 100},
-  phobos: {min: 0, max: 3, step: 0.1, start: 3},
-  heat: {min: 0, max: 3, step: 0.1, start: 3},
-  none: {min: null, max: null, step: null, start: null},
+const sliderParameters = {
+  chrome: {min: 0, max: 1, step: 0.1, start: 1, cssFunc: 'grayscale', unit: ''},
+  sepia: {min: 0, max: 1, step: 0.1, start: 1, cssFunc: 'sepia', unit: ''},
+  marvin: {min: 0, max: 100, step: 1, start: 100, cssFunc: 'invert', unit: '%'},
+  phobos: {min: 0, max: 3, step: 0.1, start: 3, cssFunc: 'blur', unit: 'px'},
+  heat: {min: 0, max: 3, step: 0.1, start: 3, cssFunc: 'brightness', unit: ''},
+  none: {min: null, max: null, step: null, start: null, cssFunc: null, unit: null},
 };
 
 const effectPhotoSliderContainer = document.querySelector('.img-upload__effect-level');
@@ -35,46 +17,27 @@ const effectsFieldset = document.querySelector('.effects');
 const effectslevelValue = document.querySelector('.effect-level__value');
 
 
-noUiSlider.create(effectPhotoSliderElement, {
-  range: {
-    min: 0,
-    max: 1,
-  },
-  start: 1,
-  step: 0.1,
-  connect: 'lower',
-
-  format: {
-    to: function (value) {
-      return parseFloat(value).toFixed(1);
-    },
-
-    from: function (value) {
-      return parseFloat(value).toFixed(1);
-    }
-  }
-});
-
 const sliderUpdatePapremeters = (effect) => {
-  if (effectsListMap[effect] !== 'none') {
+  if (effect !== 'none') {
     effectPhotoSliderElement.noUiSlider.updateOptions({
       range: {
-        min: sliderPapameters[effect].min,
-        max: sliderPapameters[effect].max,
+        min: sliderParameters[effect].min,
+        max: sliderParameters[effect].max,
       },
-      start: sliderPapameters[effect].start,
-      step: sliderPapameters[effect].step
+      start: sliderParameters[effect].start,
+      step: sliderParameters[effect].step
     });
   }
 };
 
 
-// Функция обновления фильтра изображения через style
+// Функция обновления фильтра изображения через свойство style
 const getImgFilter = () => {
-  imgElement.style.filter = `${effectsListMap[currentEffectName]}(${effectsLevelNumber}${effectsUnitMap[currentEffectName]})`;
+  const {cssFunc, unit} = sliderParameters[currentEffectName];
+  imgElement.style.filter = `${cssFunc}(${effectsLevelNumber}${unit})`;
   effectPhotoSliderContainer.classList.remove('hidden');
 
-  if (effectsListMap[currentEffectName] === 'none') {
+  if (currentEffectName === 'none') {
     imgElement.style.filter = 'none';
     effectPhotoSliderContainer.classList.add('hidden');
   }
@@ -87,8 +50,6 @@ const getLevelEffectfromSlider = () => {
   getImgFilter();
 };
 
-effectPhotoSliderElement.noUiSlider.on('update', getLevelEffectfromSlider);
-
 // Получаем значение от радиокнопок и обновляем фильтр изображения
 const getTypeEffectsfromRadiobuttons = (evt) => {
   currentEffectName = evt.target.value;
@@ -96,4 +57,33 @@ const getTypeEffectsfromRadiobuttons = (evt) => {
   getImgFilter();
 };
 
-effectsFieldset.addEventListener('change', getTypeEffectsfromRadiobuttons);
+const initSlider = () => {
+  noUiSlider.create(effectPhotoSliderElement, {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    start: 1,
+    step: 0.1,
+    connect: 'lower',
+
+    format: {
+      to: function (value) {
+        return parseFloat(value).toFixed(1);
+      },
+
+      from: function (value) {
+        return parseFloat(value).toFixed(1);
+      }
+    }
+  });
+  effectPhotoSliderElement.noUiSlider.on('update', getLevelEffectfromSlider);
+  effectsFieldset.addEventListener('change', getTypeEffectsfromRadiobuttons);
+};
+
+const resetFilters = () => {
+  imgElement.style.filter = 'none';
+  effectPhotoSliderContainer.classList.add('hidden');
+};
+
+export {initSlider, resetFilters};

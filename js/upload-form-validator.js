@@ -2,7 +2,8 @@
 const uploadForm = document.querySelector('.img-upload__form');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
-const hashtagExample = /^#[a-zа-яё0-9]{1,19}$/i;
+const hashtagExample = /[a-zа-яё0-9]/i;
+const hashtagStartSymbol = /^#/;
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -10,23 +11,12 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
-const messages = {
-  match: 'Хэштеги начинаются с "#", состоят из букв (от 1 до 19) и отделяются пробелом',
-  amount: 'Больше пяти хэштегов - это перебор. Давай сократим количество?',
-  repeat: 'Одинаковые хэштеги - не ок. Давай удалим?'
-};
+// ФУНКЦИИ ДЛЯ ВАЛИДАЦИИ
+// Хэштег начинается с решетки
+const checkHashtagStart = (hashtagsArray) => hashtagsArray.every((hashtag) => hashtagStartSymbol.test(hashtag));
 
-// Количество хэштегов не более 5
-const checkAmountHashtags = (hashtagsArray) => hashtagsArray.length <= 5;
-
-// Соответствие образцу
-const matchHashtagExample = (hashtagsArray) => {
-  if (hashtagsInput.value === '') {
-    return true;
-  } else {
-    return hashtagsArray.every((hashtag) => hashtagExample.test(hashtag));
-  }
-};
+// Хэштег соответствует образцу
+const matchHashtagExample = (hashtagsArray) => hashtagsArray.every((hashtag) => hashtagExample.test(hashtag));
 
 // Одинаковые хэштеги
 const checkRepeatHashtags = (hashtagsArray) => {
@@ -35,28 +25,59 @@ const checkRepeatHashtags = (hashtagsArray) => {
   return duplicates.size === lowerCaseHashtags.length;
 };
 
-// Общая функция
-const checkHashtags = () => {
-  const hashtags = hashtagsInput.value.trim().split(' ');
-  return matchHashtagExample(hashtags) && checkRepeatHashtags(hashtags) && checkAmountHashtags(hashtags);
-};
+// Количество хэштегов не более 5
+const checkAmountHashtags = (hashtagsArray) => hashtagsArray.length <= 5;
 
-// Создаем сообщения
-const createMessage = () => {
-  const hashtags = hashtagsInput.value.trim().split(' ');
-  if (!checkAmountHashtags(hashtags)) {
-    return messages.amount;
-  } else if (!matchHashtagExample(hashtags)) {
-    return messages.match;
-  } else if (!checkRepeatHashtags(hashtags)) {
-    return messages.repeat;
+// Хэштег не длиннее 20 символов
+const checkHashtagsLength = (hashtagsArray) => hashtagsArray.every((hashtag) => hashtag.length < 20);
+
+// Найдем решетку в тексте хэштега
+const checkHashtagIncludesHash = (hashtagsArray) => {
+  for (const hashtag of hashtagsArray) {
+    if (hashtag.slice(1).includes('#')) {
+      return false;
+    }
   }
+  return true;
 };
 
+// Объект с функциями проверки и текстами ошибок
+const ErrorsMap = {
+  start: {checkFunc: checkHashtagStart, text: 'Хэштег должен начинаться с решетки "#"'},
+  match: {checkFunc: matchHashtagExample, text: 'Хэштег должен состоять из букв и цифр, хотя бы одной'},
+  amount: {checkFunc: checkAmountHashtags, text: 'Больше пяти хэштегов - это слишком много'},
+  repeat: {checkFunc: checkRepeatHashtags, text: 'Одинаковых хэштегов быть не должно'},
+  length: {checkFunc: checkHashtagsLength, text: 'Хэштег не должен быть длинее 20 символов'},
+  include: {checkFunc: checkHashtagIncludesHash, text: 'Хэштеги должны разделяться пробелом'}
+};
+
+// Общая функция проверки для валидатора
+let errorMessage = null;
+
+const checkHashtags = () => {
+  const hashtags = hashtagsInput.value.split(' ');
+
+  if (hashtagsInput.value === '') {
+    return true;
+  }
+
+  for (const error in ErrorsMap) {
+    if (!ErrorsMap[error].checkFunc(hashtags)) {
+      errorMessage = ErrorsMap[error].text;
+      return false;
+    }
+  }
+  return true;
+};
+
+// Функция возврата сообщения об ошибке для валиадатора
+const getErrorMessage = () => errorMessage;
+
+// Запускаем валидатор
 pristine.addValidator(
   hashtagsInput,
   checkHashtags,
-  createMessage
+  getErrorMessage
 );
 
 // Валидация длины комментария

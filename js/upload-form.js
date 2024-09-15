@@ -1,6 +1,8 @@
 import {initPopup} from './open-close-popup.js';
 import {addScaleChangeListeners, resetScaleChanges} from './scale-control.js';
 import {pristine} from './upload-form-validator.js';
+import {resetFilters} from './create-effects-slider.js';
+
 
 const uploadForm = document.querySelector('.img-upload__form');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
@@ -14,6 +16,7 @@ const resetImgEditor = () => {
   resetScaleChanges();
   uploadForm.reset();
   pristine.reset();
+  resetFilters();
 };
 
 const { openPopup } = initPopup(uploadImgEditor, closeUploadFormButton, resetImgEditor);
