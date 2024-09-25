@@ -13,7 +13,7 @@ const renderPreviews = (photosArray) => {
     imgPicture.alt = photo.description;
     previewPicture.querySelector('.picture__comments').textContent = photo.comments.length;
     previewPicture.querySelector('.picture__likes').textContent = photo.likes;
-    previewPicture.dataset.photoId = photo.photoId;
+    previewPicture.dataset.photoId = photo.id;
     fragment.appendChild(previewPicture);
   });
   pictureContainer.append(fragment);
@@ -25,7 +25,7 @@ const openFullPhotoOnClick = (photosArray) => {
     if (preview === undefined || preview === null) {
       return;
     }
-    const targetPhoto = photosArray.find((item) => item.photoId === Number(preview.dataset.photoId));
+    const targetPhoto = photosArray.find((item) => item.id === Number(preview.dataset.photoId));
     renderFullPhoto(targetPhoto);
   };
   pictureContainer.addEventListener('click', handleOpenFullPhoto);

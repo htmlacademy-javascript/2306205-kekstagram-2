@@ -49,7 +49,7 @@ const initPopup = (popupElement, closeButtonElement, onClose) => {
     addCloseButtonListener(closeButtonElement, closePopup);
   };
 
-  return {openPopup};
+  return {openPopup, closePopup};
 };
 
 

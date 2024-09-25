@@ -2,7 +2,8 @@ import {initPopup} from './open-close-popup.js';
 import {addScaleChangeListeners, resetScaleChanges} from './scale-control.js';
 import {pristine} from './upload-form-validator.js';
 import {resetFilters} from './create-effects-slider.js';
-
+import {createDataMessage} from './util.js';
+import {sendData} from './api.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
@@ -19,16 +20,21 @@ const resetImgEditor = () => {
   resetFilters();
 };
 
-const { openPopup } = initPopup(uploadImgEditor, closeUploadFormButton, resetImgEditor);
+const { openPopup, closePopup } = initPopup(uploadImgEditor, closeUploadFormButton, resetImgEditor);
 
 const initUploadForm = () => {
-  addScaleChangeListeners();
-
   uploadInput.addEventListener('change', openPopup);
+  addScaleChangeListeners();
 
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    pristine.validate();
+    const isValid = pristine.validate();
+    if (isValid) {
+      const formData = new FormData(evt.target);
+      sendData(formData);
+      closePopup();
+      createDataMessage('success');
+    }
   });
 
   hashtagsInput.addEventListener('keydown', (evt) => evt.stopPropagation());
