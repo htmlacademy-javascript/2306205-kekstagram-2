@@ -12,19 +12,19 @@ const hidePopup = (element) => {
 };
 
 // Слушатель кнопки Эскейп на документ
+const onDocumentKeydown = (func) => (evt) => {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    func();
+  }
+};
+
 const addDocumentEscapeListener = (func) => {
   document.addEventListener('keydown', func);
 };
 
 const removeDocumentEscapeListener = (func) => {
   document.removeEventListener('keydown', func);
-};
-
-const onDocumentKeydown = (func) => (evt) => {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
-    func();
-  }
 };
 
 // Слушатель на кнопку закрытия

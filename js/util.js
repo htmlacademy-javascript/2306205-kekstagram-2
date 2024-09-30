@@ -24,38 +24,38 @@ const getRandomNonRepetitiveNumber = (min, max) => {
 
 const getRandonArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
-const showAlert = (message) => {
-  const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = '100';
-  alertContainer.style.position = 'absolute';
-  alertContainer.style.left = '0';
-  alertContainer.style.top = '0';
-  alertContainer.style.right = '0';
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '24px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'red';
-
-  alertContainer.textContent = message;
-
-  document.body.append(alertContainer);
-
-  setTimeout(() => {
-    alertContainer.remove();
-  }, ALERT_SHOW_TIME);
-};
-
 const createDataMessage = (id) => {
   const messageTemplate = document.getElementById(`${id}`).content.querySelector(`.${id}`);
   const messageContainer = messageTemplate.cloneNode(true);
   const closeButton = messageContainer.querySelector(`.${id}__button`);
   document.body.append(messageContainer);
+
+  const handleKeypress = (evt) => {
+    if (evt.key === 'Escape') {
+      closeDataMessage();
+      document.removeEventListener('keydown', handleKeypress);
+    }
+  };
+
+  document.addEventListener('keydown', handleKeypress);
   closeButton.addEventListener('click', closeDataMessage);
+  document.addEventListener('click', closeDataMessage);
 
   function closeDataMessage () {
     messageContainer.remove();
     closeButton.removeEventListener('click', closeDataMessage);
+    document.removeEventListener('click', closeDataMessage);
   }
+};
+
+const showAlert = (message) => {
+  const alertMessage = document.getElementById('error-load').content.querySelector('div');
+  alertMessage.textContent = `${message}`;
+  document.body.append(alertMessage);
+
+  setTimeout(() => {
+    alertMessage.remove();
+  }, ALERT_SHOW_TIME);
 };
 
 export {getRandomInteger, getRandomNonRepetitiveNumber, getRandonArrayElement, showAlert, createDataMessage};

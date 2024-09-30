@@ -1,25 +1,9 @@
 import {showAlert, createDataMessage} from './util.js';
 
-const getData = async () => {
-  let response;
-  try {
-    response = await fetch('https://31.javascript.htmlacademy.pro/kekstagram/data');
-    if (!response.ok) {
-      throw new Error();
-    }
-  } catch (err) {
-    showAlert('Не удалось загрузить данные с сервера. Попробуйте перезагрузить страницу');
-    return [];
-  }
 
-  const loadedPhotos = await response.json();
-  return loadedPhotos;
-};
-
-const sendData = async (data) => {
-  let response;
+const sendData = async (data, onSuccess) => {
   try {
-    response = await fetch('https://31.javascript.htmlacademy.pro/kekstagram',
+    const response = await fetch('https://31.javascript.htmlacademy.pro/kekstagram',
       {
         method: 'POST',
         body: data
@@ -28,8 +12,25 @@ const sendData = async (data) => {
     if (!response.ok) {
       throw new Error();
     }
+    onSuccess();
+    createDataMessage('success');
   } catch (err) {
     createDataMessage('error');
+  }
+};
+
+const getData = async () => {
+  try {
+    const response = await fetch('https://31.javascript.htmlacademy.pro/kekstagram/data');
+
+    if (!response.ok) {
+      throw new Error();
+    }
+    return await response.json();
+
+  } catch (err) {
+    showAlert('Не удалось загрузить данные с сервера. Попробуйте перезагрузить страницу');
+    return [];
   }
 };
 

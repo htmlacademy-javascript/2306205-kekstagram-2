@@ -5,13 +5,9 @@ import './upload-form-validator.js';
 import './scale-control.js';
 import {getData} from './api.js';
 
+
 const loadedPhotos = await getData();
 renderPreviews(loadedPhotos);
 openFullPhotoOnClick(loadedPhotos);
 initUploadForm();
 initSlider();
-
-// getData((data) => {
-//   renderPreviews(data);
-//   openFullPhotoOnClick(data);
-// });
