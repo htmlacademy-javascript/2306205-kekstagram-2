@@ -1,37 +1,28 @@
-import {showAlert, createDataMessage} from './util.js';
+const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
-
-const sendData = async (data, onSuccess) => {
-  try {
-    const response = await fetch('https://31.javascript.htmlacademy.pro/kekstagram',
-      {
-        method: 'POST',
-        body: data
-      });
-
-    if (!response.ok) {
-      throw new Error();
-    }
-    onSuccess();
-    createDataMessage('success');
-  } catch (err) {
-    createDataMessage('error');
-  }
+const Route = {
+  GET_DATA: '/data',
+  SEND_DATA: '/',
 };
 
-const getData = async () => {
-  try {
-    const response = await fetch('https://31.javascript.htmlacademy.pro/kekstagram/data');
-
-    if (!response.ok) {
-      throw new Error();
-    }
-    return await response.json();
-
-  } catch (err) {
-    showAlert('Не удалось загрузить данные с сервера. Попробуйте перезагрузить страницу');
-    return [];
-  }
+const Method = {
+  GET: 'GET',
+  POST: 'POST'
 };
+
+
+const sendRequest = async (route, method, data = null) => {
+  const response = await fetch(`${BASE_URL}${route}`,
+    {
+      method: method,
+      body: data
+    });
+
+  return !response.ok ? Promise.reject() : response.json();
+};
+
+const sendData = async (body) => sendRequest(Route.SEND_DATA, Method.POST, body);
+
+const getData = async () => sendRequest(Route.GET_DATA, Method.GET);
 
 export {getData, sendData};

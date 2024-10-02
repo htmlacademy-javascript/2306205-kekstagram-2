@@ -2,12 +2,8 @@ import {initPopup} from './open-close-popup.js';
 import {addScaleChangeListeners, resetScaleChanges} from './scale-control.js';
 import {pristine} from './upload-form-validator.js';
 import {resetFilters} from './create-effects-slider.js';
-import {sendData} from './api.js';
+import {uploadFormData} from './load-data.js';
 
-const SubmitButtonText = {
-  IDLE: 'Опубликовать',
-  SENDING: 'Публикую...'
-};
 
 const uploadForm = document.querySelector('.img-upload__form');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
@@ -19,23 +15,11 @@ const closeUploadFormButton = uploadForm.querySelector('.img-upload__cancel');
 const effectPhotoSliderContainer = document.querySelector('.img-upload__effect-level');
 
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
-};
-
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
-
-
 const resetImgEditor = () => {
   resetScaleChanges();
   uploadForm.reset();
   pristine.reset();
   resetFilters();
-  unblockSubmitButton();
 };
 
 const { openPopup, closePopup } = initPopup(uploadImgEditor, closeUploadFormButton, resetImgEditor);
@@ -46,11 +30,10 @@ const initUploadForm = () => {
 
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    blockSubmitButton();
     const isValid = pristine.validate();
     if (isValid) {
       const formData = new FormData(evt.target);
-      sendData(formData, closePopup);
+      uploadFormData(formData, submitButton, closePopup);
     }
   });
 
@@ -60,5 +43,5 @@ const initUploadForm = () => {
   effectPhotoSliderContainer.classList.add('hidden');
 };
 
-export {initUploadForm, unblockSubmitButton};
+export {initUploadForm};
 
