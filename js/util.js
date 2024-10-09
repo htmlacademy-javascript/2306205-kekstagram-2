@@ -22,6 +22,7 @@ const getRandomNonRepetitiveNumber = (min, max) => {
   };
 };
 
+
 const getRandonArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
 const createDataMessage = (id) => {
@@ -49,7 +50,7 @@ const createDataMessage = (id) => {
 };
 
 const showAlert = (message) => {
-  const alertMessage = document.getElementById('error-load').content.querySelector('div');
+  const alertMessage = document.getElementById('error-load').content.querySelector('.error-load');
   alertMessage.textContent = `${message}`;
   document.body.append(alertMessage);
 
