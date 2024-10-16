@@ -1,9 +1,8 @@
-import {renderFullPhoto} from './create-full-photo.js';
+import { renderFullPhoto } from './create-full-photo.js';
 
 const pictureContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const picturesFilter = document.querySelector('.img-filters');
-
 
 const renderPreviews = (photosArray) => {
   const fragment = document.createDocumentFragment();

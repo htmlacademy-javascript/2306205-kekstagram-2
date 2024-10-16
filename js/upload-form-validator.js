@@ -31,8 +31,9 @@ const checkAmountHashtags = (hashtagsArray) => hashtagsArray.length <= 5;
 // Хэштег не длиннее 20 символов
 const checkHashtagsLength = (hashtagsArray) => hashtagsArray.every((hashtag) => hashtag.length < 20);
 
-// Найдем решетку в тексте хэштега
+// Найдем решетку в хэштеге
 const checkHashtagIncludesHash = (hashtagsArray) => {
+
   for (const hashtag of hashtagsArray) {
     if (hashtag.slice(1).includes('#')) {
       return false;
@@ -55,11 +56,7 @@ const ErrorsMap = {
 let errorMessage = null;
 
 const checkHashtags = () => {
-  const hashtags = hashtagsInput.value.split(' ');
-
-  if (hashtagsInput.value === '') {
-    return true;
-  }
+  const hashtags = hashtagsInput.value.trim().split(' ');
 
   for (const error in ErrorsMap) {
     if (!ErrorsMap[error].checkFunc(hashtags)) {
