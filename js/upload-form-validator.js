@@ -33,7 +33,6 @@ const checkHashtagsLength = (hashtagsArray) => hashtagsArray.every((hashtag) => 
 
 // Найдем решетку в хэштеге
 const checkHashtagIncludesHash = (hashtagsArray) => {
-
   for (const hashtag of hashtagsArray) {
     if (hashtag.slice(1).includes('#')) {
       return false;
@@ -56,7 +55,10 @@ const ErrorsMap = {
 let errorMessage = null;
 
 const checkHashtags = () => {
-  const hashtags = hashtagsInput.value.trim().split(' ');
+  const hashtags = hashtagsInput.value
+    .trim()
+    .split(' ')
+    .filter((hahtag) => hahtag !== '');
 
   for (const error in ErrorsMap) {
     if (!ErrorsMap[error].checkFunc(hashtags)) {

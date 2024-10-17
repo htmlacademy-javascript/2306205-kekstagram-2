@@ -1,9 +1,8 @@
 import { getRandomInteger } from './util.js';
 import { renderPreviews } from './create-preview.js';
-import { debounce, throttle } from './util.js';
+import { debounce } from './util.js';
 
 const TOTAL_RANDOM_PHOTOS = 10;
-const DELAY = 500;
 let _photos = [];
 
 const removeOldRenderedPhotos = () => {
@@ -47,21 +46,16 @@ const getDefaultPhotoArray = () => _photos;
 
 const photosFilter = (getPhotoArray) => (evt) => {
   changeActiveButton(evt);
-
-  const renderNewPreview = () => {
-    removeOldRenderedPhotos();
-    renderPreviews(getPhotoArray());
-  };
-
-  const debouncedRender = debounce(renderNewPreview);
-  debouncedRender();
+  removeOldRenderedPhotos();
+  renderPreviews(getPhotoArray());
 };
+
 
 const initPhotosFilters = (photos) => {
   _photos = photos;
-  defaultPhotoButton.addEventListener('click', photosFilter(getDefaultPhotoArray));
-  randomPhotoButton.addEventListener('click', throttle(photosFilter(getRandomPhotoArray), DELAY));
-  popularPhotoButton.addEventListener('click', photosFilter(getPopularPhotoArray));
+  defaultPhotoButton.addEventListener('click', debounce(photosFilter(getDefaultPhotoArray)));
+  randomPhotoButton.addEventListener('click', debounce(photosFilter(getRandomPhotoArray)));
+  popularPhotoButton.addEventListener('click', debounce(photosFilter(getPopularPhotoArray)));
 };
 
 export {initPhotosFilters};
