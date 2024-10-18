@@ -61,7 +61,6 @@ const showAlert = (message) => {
 
 const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
-  console.log(Math.random());
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
