@@ -43,19 +43,26 @@ const getRandomPhotoArray = () => {
 
 const getDefaultPhotoArray = () => _photos;
 
-
-const photosFilter = (getPhotoArray) => (evt) => {
-  changeActiveButton(evt);
+const renderNewPreview = (getPhotoArray) => {
   removeOldRenderedPhotos();
   renderPreviews(getPhotoArray());
 };
 
+const photosFilter = (renderCallback) => (evt) => {
+  changeActiveButton(evt);
+  renderCallback();
+};
 
 const initPhotosFilters = (photos) => {
   _photos = photos;
-  defaultPhotoButton.addEventListener('click', debounce(photosFilter(getDefaultPhotoArray)));
-  randomPhotoButton.addEventListener('click', debounce(photosFilter(getRandomPhotoArray)));
-  popularPhotoButton.addEventListener('click', debounce(photosFilter(getPopularPhotoArray)));
+
+  const debouncedDefaultRender = debounce(() => renderNewPreview(getDefaultPhotoArray));
+  const debouncedRandomRender = debounce(() => renderNewPreview(getRandomPhotoArray));
+  const debouncedPopularRender = debounce(() => renderNewPreview(getPopularPhotoArray));
+
+  defaultPhotoButton.addEventListener('click', photosFilter(debouncedDefaultRender));
+  randomPhotoButton.addEventListener('click', photosFilter(debouncedRandomRender));
+  popularPhotoButton.addEventListener('click', photosFilter(debouncedPopularRender));
 };
 
 export {initPhotosFilters};
